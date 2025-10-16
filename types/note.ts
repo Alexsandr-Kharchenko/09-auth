@@ -9,6 +9,14 @@ export interface Note {
   updatedAt: string;
 }
 
+export const NOTE_TAGS: NoteTag[] = [
+  'Todo',
+  'Work',
+  'Personal',
+  'Meeting',
+  'Shopping',
+];
+
 export interface NoteFormData {
   title: string;
   content: string;

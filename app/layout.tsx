@@ -5,6 +5,7 @@ import Footer from '@/components/Footer/Footer';
 import TanStackProvider from '@/components/TanStackProvider/TanStackProvider';
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
+import AuthProvider from '@/components/AuthProvider/AuthProvider';
 
 // Імпортуємо шрифт Roboto з параметрами
 const roboto = Roboto({
@@ -37,20 +38,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  modal,
 }: {
   children: React.ReactNode;
-  modal: React.ReactNode;
 }) {
   return (
     <html lang="en">
-      <body className={roboto.className}>
+      <body>
         <TanStackProvider>
-          <Header />
-          <main>{children}</main>
-          <Footer />
-          {modal}
-          <div id="modal-root"></div>
+          <AuthProvider>
+            <Header />
+            <main>{children}</main>
+            <Footer />
+          </AuthProvider>
         </TanStackProvider>
       </body>
     </html>

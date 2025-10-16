@@ -1,8 +1,9 @@
-import TagsMenu from '../TagsMenu/TagsMenu';
-import css from './Header.module.css';
 import Link from 'next/link';
+import TagsMenu from '@/components/TagsMenu/TagsMenu';
+import AuthNavigation from '@/components/AuthNavigation/AuthNavigation';
+import css from './Header.module.css';
 
-export default async function Header() {
+const Header = () => {
   return (
     <header className={css.header}>
       <Link href="/" aria-label="Home" className={css.headerLink}>
@@ -15,6 +16,7 @@ export default async function Header() {
               Home
             </Link>
           </li>
+          <AuthNavigation />
           <li className={css.navigationItem}>
             <TagsMenu />
           </li>
@@ -22,4 +24,6 @@ export default async function Header() {
       </nav>
     </header>
   );
-}
+};
+
+export default Header;

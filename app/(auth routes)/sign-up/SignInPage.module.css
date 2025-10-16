@@ -1,12 +1,12 @@
-.form {
+.mainContent {
+  flex: 1;
   display: flex;
-  flex-direction: column;
-  gap: 20px;
-  background-color: #ffffff;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  animation: fadeInUp 0.4s ease forwards;
+  justify-content: center;
+  align-items: center;
+  padding: 32px;
+
+  /* Легка анімація появи */
+  animation: fadeInUp 0.5s ease forwards;
   opacity: 0;
 }
 
@@ -21,20 +21,46 @@
   }
 }
 
-.formGroup {
+.form {
   display: flex;
   flex-direction: column;
-  font-size: 14px;
-  font-weight: 500;
-  color: #212529;
-  position: relative;
-  animation: fadeInInput 0.4s ease forwards;
+  gap: 20px;
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 28px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  animation: fadeInForm 0.4s ease forwards;
+  opacity: 0;
 }
 
-@keyframes fadeInInput {
+@keyframes fadeInForm {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.formTitle {
+  font-size: 26px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 16px;
+  color: #212529;
+  animation: fadeInText 0.4s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInText {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(-5px);
   }
   to {
     opacity: 1;
@@ -42,9 +68,15 @@
   }
 }
 
-.input,
-.textarea,
-.select {
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  font-weight: 500;
+  color: #212529;
+}
+
+.input {
   margin-top: 6px;
   padding: 12px 14px;
   font-size: 15px;
@@ -57,16 +89,9 @@
   background-color: #f8f9fa;
 }
 
-.input:focus,
-.textarea:focus,
-.select:focus {
+.input:focus {
   border-color: #0d6efd;
   box-shadow: 0 0 10px rgba(13, 110, 253, 0.3);
-}
-
-.textarea {
-  resize: vertical;
-  min-height: 100px;
 }
 
 .actions {
@@ -102,34 +127,8 @@
 }
 
 .submitButton:disabled {
-  background-color: #6c757d;
+  background-color: #b1c7ae;
   cursor: not-allowed;
-  box-shadow: none;
-}
-
-.cancelButton {
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: 500;
-  background-color: #f8f9fa;
-  color: #212529;
-  border: 1.5px solid #ced4da;
-  border-radius: 8px;
-  cursor: pointer;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.cancelButton:hover {
-  background-color: #e2e6ea;
-  transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.cancelButton:active {
-  transform: translateY(0);
   box-shadow: none;
 }
 
@@ -138,6 +137,7 @@
   font-size: 13px;
   margin-top: 4px;
   font-weight: 500;
+  text-align: center;
   animation: fadeInError 0.3s ease forwards;
 }
 

@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import SearchBox from '@/components/SearchBox/SearchBox';
 import Pagination from '@/components/Pagination/Pagination';
 import NoteList from '@/components/NoteList/NoteList';
-import { fetchNotes, type ResponseAPI } from '@/lib/api';
+import { fetchNotes, type FetchNotesResponse } from '@/lib/api/clientApi';
 import { Toaster } from 'react-hot-toast';
 import css from './NotesPage.module.css';
 
@@ -25,7 +25,7 @@ export default function NotesClient({ tag = 'All' }: NotesClientProps) {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  // Debounce для пошуку
+  // Debounce пошуку
   useEffect(() => {
     const handler = setTimeout(() => {
       setSearchQuery(searchInput);
@@ -37,16 +37,16 @@ export default function NotesClient({ tag = 'All' }: NotesClientProps) {
 
   const safeTag = tag === 'All' ? undefined : tag;
 
-  const query = useQuery<ResponseAPI, Error>({
+  const query = useQuery<FetchNotesResponse, Error>({
     queryKey: ['notes', currentPage, searchQuery, safeTag],
     queryFn: () =>
       fetchNotes({
-        searchWord: searchQuery,
+        search: searchQuery,
         page: currentPage,
         tag: safeTag,
       }),
     placeholderData: () => {
-      const prevData = queryClient.getQueryData<ResponseAPI>([
+      const prevData = queryClient.getQueryData<FetchNotesResponse>([
         'notes',
         currentPage - 1 > 0 ? currentPage - 1 : 1,
         searchQuery,

@@ -1,36 +1,43 @@
-'use client';
-
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create, type StoreApi } from 'zustand';
+import { persist, type PersistOptions } from 'zustand/middleware';
 import type { NoteTag } from '@/types/note';
 
-export interface DraftNote {
+export type NoteDraft = {
   title: string;
   content: string;
   tag: NoteTag;
-}
+};
 
-const initialDraft: DraftNote = {
+export const initialDraft: NoteDraft = {
   title: '',
   content: '',
   tag: 'Todo',
 };
 
-interface NoteStore {
-  draft: DraftNote;
-  setDraft: (draft: DraftNote) => void;
+const createInitialDraft = (): NoteDraft => ({ ...initialDraft });
+
+type NoteStore = {
+  draft: NoteDraft;
+  setDraft: (note: Partial<NoteDraft>) => void;
   clearDraft: () => void;
-}
+};
+
+type NoteStorePersist = PersistOptions<NoteStore, Pick<NoteStore, 'draft'>>;
+
+type SetState = StoreApi<NoteStore>['setState'];
+
+const noteStoreCreator = (set: SetState): NoteStore => ({
+  draft: createInitialDraft(),
+  setDraft: (note: Partial<NoteDraft>) =>
+    set(state => ({
+      draft: { ...state.draft, ...note },
+    })),
+  clearDraft: () => set({ draft: createInitialDraft() }),
+});
 
 export const useNoteStore = create<NoteStore>()(
-  persist(
-    set => ({
-      draft: initialDraft,
-      setDraft: draft => set({ draft }),
-      clearDraft: () => set({ draft: initialDraft }),
-    }),
-    {
-      name: 'note-draft-storage',
-    }
-  )
+  persist<NoteStore, [], [], Pick<NoteStore, 'draft'>>(noteStoreCreator, {
+    name: 'notehub-note-draft',
+    partialize: state => ({ draft: state.draft }),
+  } satisfies NoteStorePersist)
 );
