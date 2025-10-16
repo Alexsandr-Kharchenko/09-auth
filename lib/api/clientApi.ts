@@ -15,12 +15,10 @@ export interface FetchNotesResponse {
   totalPages: number;
 }
 
-// --- Базовий URL для клієнта ---
 const clientApi = axios.create({
-  baseURL: '', // Пустий = буде використовувати поточний домен Next.js
+  baseURL: '',
 });
 
-// --- Будуємо параметри для списку нот ---
 const buildNotesParams = ({
   page = 1,
   perPage = 12,
@@ -33,7 +31,6 @@ const buildNotesParams = ({
   ...(tag && tag !== 'All' ? { tag } : {}),
 });
 
-// --- NOTES REQUEST FUNCTIONS ---
 export const fetchNotesRequest = async (
   params?: FetchNotesParams,
   config?: AxiosRequestConfig
@@ -82,7 +79,6 @@ export const deleteNoteRequest = async (
   return response.data;
 };
 
-// --- Прості функції без config ---
 export const fetchNotes = (params?: FetchNotesParams) =>
   fetchNotesRequest(params);
 export const fetchNoteById = (id: string) => fetchNoteByIdRequest(id);
@@ -93,7 +89,6 @@ export const updateNote = (id: string, payload: Partial<Note>) =>
   updateNoteRequest(id, payload);
 export const deleteNote = (id: string) => deleteNoteRequest(id);
 
-// --- AUTH & USER ---
 export const login = (credentials: AuthCredentials) =>
   clientApi.post<User>('/api/auth/login', credentials).then(res => res.data);
 
@@ -105,7 +100,6 @@ export const register = async (credentials: AuthCredentials) => {
     );
     return response.data;
   } catch (error: unknown) {
-    // Приводимо до AxiosError
     const axiosError = error as AxiosError<{ message: string }>;
 
     if (axiosError.response?.status === 409) {

@@ -11,7 +11,6 @@ interface Props {
   params: { id: string };
 }
 
-// Динамічне SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const note = await fetchNoteById(params.id);
 

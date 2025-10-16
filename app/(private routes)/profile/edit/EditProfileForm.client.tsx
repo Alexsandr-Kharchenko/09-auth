@@ -53,28 +53,24 @@ const EditProfileForm = ({ user }: Props) => {
   };
 
   return (
-    <form className={css.profileCard} onSubmit={handleSubmit} noValidate>
-      <h1 className={css.formTitle}>Edit profile</h1>
+    <form onSubmit={handleSubmit} noValidate className={css.profileInfo}>
+      <p>
+        <strong>Email:</strong> {user.email}
+      </p>
 
-      <div className={css.profileInfo}>
-        <p>
-          <strong>Email:</strong> {user.email}
-        </p>
-
-        <div className={css.usernameWrapper}>
-          <label htmlFor="username">Username</label>
-          <input
-            id="username"
-            name="username"
-            type="text"
-            className={css.input}
-            value={username}
-            onChange={e => setUsername(e.target.value)}
-            minLength={3}
-            maxLength={50}
-            required
-          />
-        </div>
+      <div className={css.usernameWrapper}>
+        <label htmlFor="username">Username</label>
+        <input
+          id="username"
+          name="username"
+          type="text"
+          className={css.input}
+          value={username}
+          onChange={e => setUsername(e.target.value)}
+          minLength={3}
+          maxLength={50}
+          required
+        />
       </div>
 
       {error && <p className={css.error}>{error}</p>}

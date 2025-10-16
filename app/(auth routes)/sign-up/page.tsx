@@ -46,7 +46,6 @@ const SignUpPage = () => {
       const user = await register(payload);
       setUser(user);
 
-      // Wait for cookies to be set
       await new Promise(resolve => setTimeout(resolve, 300));
 
       const redirectTarget = searchParams?.get('redirect');

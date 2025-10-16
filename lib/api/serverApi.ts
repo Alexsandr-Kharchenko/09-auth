@@ -6,7 +6,6 @@ import type { UpdateUserRequest } from '@/types/auth';
 import type { User } from '@/types/user';
 import type { FetchNotesParams } from './clientApi';
 
-// --- Додаємо cookies ---
 const mergeConfigs = async (
   config?: AxiosRequestConfig
 ): Promise<AxiosRequestConfig> => {
@@ -21,7 +20,6 @@ const mergeConfigs = async (
   };
 };
 
-// --- NOTES ---
 export const fetchNotesServer = async (params?: FetchNotesParams) => {
   const config = await mergeConfigs();
   return api.get('/notes', { params, ...config }).then(res => res.data);
@@ -49,7 +47,6 @@ export const deleteNoteServer = async (id: string) => {
   return api.delete<Note>(`/notes/${id}`, config).then(res => res.data);
 };
 
-// --- AUTH ---
 export const getSessionServer = async () =>
   api.get('/auth/session', await mergeConfigs()).then(res => res.data);
 

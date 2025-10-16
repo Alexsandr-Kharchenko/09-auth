@@ -55,7 +55,6 @@ const SignInPage = () => {
           ? redirectTarget
           : '/profile';
 
-      // Use window.location for hard redirect to ensure cookies are set
       window.location.href = destination;
     } catch (error: unknown) {
       if (isAxiosError(error)) {
