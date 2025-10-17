@@ -1,6 +1,6 @@
 // app/notes/layout.tsx
 import React from 'react';
-import styles from '../Home.module.css';
+import styles from '../../../app/Home.module.css';
 
 export default function NotesLayout({
   children,
