@@ -16,7 +16,6 @@ export default function Modal({ children, onClose }: ModalProps) {
     const root = document.getElementById('modal-root') || document.body;
     setModalRoot(root);
 
-    // Забороняємо прокрутку сторінки
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
@@ -26,7 +25,6 @@ export default function Modal({ children, onClose }: ModalProps) {
     document.addEventListener('keydown', handleKey);
 
     return () => {
-      // Відновлюємо прокрутку при закритті модалки
       document.body.style.overflow = originalOverflow;
       document.removeEventListener('keydown', handleKey);
     };

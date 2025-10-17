@@ -1,36 +1,32 @@
-/* Батьківський контейнер спінера для центрування */
 .spinner {
-  position: relative; /* для ::after */
+  position: relative;
   width: 48px;
   height: 48px;
-  margin: 40px auto; /* центрування */
+  margin: 40px auto;
 }
 
-/* Основний шар */
 .spinner::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border-top: 4px solid #fff; /* білий верх */
+  border-top: 4px solid #fff;
   border-right: 4px solid transparent;
   box-sizing: border-box;
   animation: rotate 1s linear infinite;
 }
 
-/* Другий шар */
 .spinner::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border-left: 4px solid #ff3d00; /* контрастний шар */
+  border-left: 4px solid #ff3d00;
   border-bottom: 4px solid transparent;
   box-sizing: border-box;
   animation: rotate 0.5s linear infinite reverse;
 }
 
-/* Анімація обертання */
 @keyframes rotate {
   0% {
     transform: rotate(0deg);

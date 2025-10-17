@@ -31,7 +31,6 @@ export default function NoteForm({ onCancel }: NoteFormProps) {
     onError: () => toast.error('Failed to create note'),
   });
 
-  // коли draft оновився в zustand — оновлюємо локальну форму
   useEffect(() => {
     setForm(draft);
   }, [draft]);
