@@ -1,68 +1,135 @@
+/* --- Контейнер модалки --- */
 .container {
   max-width: 800px;
   margin: 32px auto;
-  padding: 24px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 32px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  transform: translateY(20px);
+  opacity: 0;
+  animation: fadeIn 0.4s ease-out forwards;
+  transition: all 0.3s ease;
 }
 
+/* --- Елементи нотатки --- */
 .item {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
+/* --- Заголовок --- */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 8px;
+  border-bottom: 1.5px solid #e2e8f0;
+  padding-bottom: 12px;
 }
 
 .header h2 {
   margin: 0;
   font-size: 28px;
-  color: #333;
+  color: #1a1a1a;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  transition: color 0.3s ease;
 }
 
+.header h2:hover {
+  color: #0070f3;
+}
+
+/* --- Контент --- */
 .content {
   font-size: 18px;
-  line-height: 26px;
-  color: #444;
+  line-height: 1.6;
+  color: #333;
   white-space: pre-wrap;
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
 }
 
+.content:hover {
+  transform: translateX(2px);
+  color: #222;
+}
+
+/* --- Дата --- */
 .date {
   font-size: 14px;
-  color: #888;
+  color: #777;
   text-align: right;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
 }
 
+.date:hover {
+  opacity: 1;
+}
+
+/* --- Тег --- */
 .tag {
   display: inline-block;
-  padding: 4px 8px;
-  font-size: 12px;
-  color: #0d6efd;
-  background-color: #e7f1ff;
-  border: 1px solid #b6d4fe;
-  border-radius: 12px;
-  max-width: 100px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: #0066ff;
+  background: linear-gradient(135deg, #e9f2ff, #f3f8ff);
+  border: 1px solid #bcd3ff;
+  border-radius: 16px;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+  transition: all 0.3s ease;
 }
 
+.tag:hover {
+  background: linear-gradient(135deg, #dce9ff, #eef4ff);
+  transform: scale(1.05);
+}
+
+/* --- Кнопка повернення --- */
 .backBtn {
   align-self: flex-start;
-  padding: 6px 12px;
-  font-size: 14px;
-  color: #000000;
-  border: none;
-  border-radius: 4px;
+  padding: 8px 18px;
+  font-size: 15px;
+  color: #0f172a; /* початковий колір тексту */
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
   cursor: pointer;
-  text-decoration: underline;
-  display: inline-block;
-  background-color: transparent;
+  text-decoration: none;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.05);
+  transition: all 0.25s ease;
+}
+
+/* Hover і focus — синій фон #0d6efd та білий текст */
+.backBtn:hover,
+.backBtn:focus {
+  color: #ffffff; /* білий текст */
+  background-color: #0d6efd; /* твій колір */
+  box-shadow: 0 4px 8px rgba(15, 23, 42, 0.15);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+/* Додатково фокус через клавіатуру */
+.backBtn:focus-visible {
+  outline: 2px solid #0a58ca; /* трохи темніший синій для фокусу */
+  outline-offset: 2px;
+}
+
+/* --- Анімація появи контейнера --- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }

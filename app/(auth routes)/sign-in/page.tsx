@@ -25,17 +25,17 @@ const SignInPage = () => {
     const password = (formData.get('password') as string) ?? '';
 
     if (!email || !password) {
-      setError('Будь ласка, введіть email і пароль.');
+      setError('Please enter your email and password.');
       return;
     }
 
     if (!isValidEmail(email)) {
-      setError('Невірний формат email.');
+      setError('Invalid email format.');
       return;
     }
 
     if (password.length < 6) {
-      setError('Пароль має містити щонайменше 6 символів.');
+      setError('Password must be at least 6 characters long.');
       return;
     }
 
@@ -68,14 +68,15 @@ const SignInPage = () => {
         if (axiosError.response?.status === 400) {
           const validationMessage = responseData?.validation?.body?.message;
           setError(
-            validationMessage ?? 'Перевірте email та пароль і спробуйте ще раз.'
+            validationMessage ??
+              'Please check your email and password and try again.'
           );
           return;
         }
 
         if (axiosError.response?.status === 401) {
           setError(
-            'Такого акаунта не знайдено або пароль невірний. Зареєструйтесь або перевірте дані.'
+            'Account not found or password is incorrect. Please sign up or check your credentials.'
           );
           return;
         }
@@ -84,10 +85,10 @@ const SignInPage = () => {
           responseData?.message ||
           responseData?.error ||
           axiosError.message ||
-          'Не вдалося виконати вхід. Спробуйте, будь ласка, ще раз.';
+          'Login failed. Please try again.';
         setError(message);
       } else {
-        setError('Не вдалося виконати вхід. Спробуйте, будь ласка, ще раз.');
+        setError('Login failed. Please try again.');
       }
     } finally {
       setIsSubmitting(false);
@@ -129,7 +130,7 @@ const SignInPage = () => {
             className={css.submitButton}
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Виконуємо вхід...' : 'Увійти'}
+            {isSubmitting ? 'Signing in...' : 'Sign In'}
           </button>
         </div>
       </form>

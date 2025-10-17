@@ -25,17 +25,17 @@ const SignUpPage = () => {
     const password = (formData.get('password') as string) ?? '';
 
     if (!email || !password) {
-      setError('Заповніть, будь ласка, email і пароль.');
+      setError('Please fill in your email and password.');
       return;
     }
 
     if (!isValidEmail(email)) {
-      setError('Невірний формат email.');
+      setError('Invalid email format.');
       return;
     }
 
     if (password.length < 6) {
-      setError('Пароль має містити щонайменше 6 символів.');
+      setError('Password must be at least 6 characters long.');
       return;
     }
 
@@ -73,7 +73,7 @@ const SignUpPage = () => {
           const conflictMessage =
             responseData?.message ||
             responseData?.error ||
-            'Такий акаунт вже існує або дані некоректні. Перевірте їх, будь ласка.';
+            'This account already exists or the data is invalid. Please check and try again.';
           setError(conflictMessage);
           return;
         }
@@ -82,7 +82,7 @@ const SignUpPage = () => {
           const conflictMessage =
             responseData?.message ||
             responseData?.error ||
-            'Користувач з таким email вже існує. Спробуйте увійти.';
+            'A user with this email already exists. Please try to sign in.';
           setError(conflictMessage);
           return;
         }
@@ -91,10 +91,10 @@ const SignUpPage = () => {
           responseData?.message ||
           responseData?.error ||
           axiosError.message ||
-          'Не вдалося завершити реєстрацію. Спробуйте знову.';
+          'Registration failed. Please try again.';
         setError(message);
       } else {
-        setError('Не вдалося завершити реєстрацію. Спробуйте знову.');
+        setError('Registration failed. Please try again.');
       }
     } finally {
       setIsSubmitting(false);
@@ -135,7 +135,7 @@ const SignUpPage = () => {
             className={css.submitButton}
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Реєструємо...' : 'Зареєструватися'}
+            {isSubmitting ? 'Registering...' : 'Sign Up'}
           </button>
         </div>
       </form>

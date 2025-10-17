@@ -4,7 +4,7 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 import NotesClient from './Notes.client';
-import { fetchNotes } from '@/lib/api/clientApi';
+import { fetchNotes } from '@/lib/api/serverApi';
 import type { NoteTag } from '@/types/note';
 import type { Metadata } from 'next';
 
@@ -44,7 +44,7 @@ export default async function Notes({ params }: Props) {
     queryKey: ['notes', category],
     queryFn: () =>
       fetchNotes({
-        search: '', // ✅ замість searchWord
+        search: '',
         page: 1,
         tag: category === 'All' ? undefined : category,
       }),

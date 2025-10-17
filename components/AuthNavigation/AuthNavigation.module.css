@@ -1,9 +1,46 @@
-.userEmail {
-  color: white;
-  margin-right: 0.5rem;
-  font-size: 0.9rem;
+/* Загальні стилі для списку меню */
+.authList {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  opacity: 1;
+  transition: opacity 0.4s ease-in-out;
 }
 
+/* Плавне з’явлення при рендері */
+.fade {
+  opacity: 0;
+  animation: fadeIn 0.4s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Елементи списку */
+.navigationItem {
+  display: flex;
+  align-items: center;
+}
+
+/* Посилання */
+.navigationLink {
+  text-decoration: none;
+  color: white;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.navigationLink:hover,
+.navigationLink:focus {
+  color: #ddd;
+}
+
+/* Кнопка logout */
 .logoutButton {
   background: transparent;
   border: 1px solid white;
@@ -14,25 +51,25 @@
   font-size: 0.9rem;
   transition:
     background-color 0.3s ease,
-    color 0.3s ease;
+    color 0.3s ease,
+    transform 0.2s ease;
 }
 
-.logoutButton:hover {
+.logoutButton:hover,
+.logoutButton:focus {
   background-color: white;
   color: #333;
+  transform: scale(1.05);
 }
 
-.navigationItem {
-  display: flex;
-  align-items: center;
-}
-
-.navigationLink {
-  text-decoration: none;
+/* Email користувача */
+.userEmail {
   color: white;
-  font-size: 1rem;
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
 }
 
-.navigationLink:hover {
+.userEmail:hover {
   color: #ddd;
 }

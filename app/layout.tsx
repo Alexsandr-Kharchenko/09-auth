@@ -7,7 +7,6 @@ import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 import AuthProvider from '@/components/AuthProvider/AuthProvider';
 
-// Імпортуємо шрифт Roboto з параметрами
 const roboto = Roboto({
   subsets: ['latin'],
   weight: ['400', '500', '700'],
@@ -15,7 +14,6 @@ const roboto = Roboto({
   display: 'swap',
 });
 
-// Описуємо metadata з обов’язковим openGraph
 export const metadata: Metadata = {
   title: 'NoteHub',
   description:
@@ -38,16 +36,21 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: {
   children: React.ReactNode;
+  modal: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={roboto.variable}>
       <body>
         <TanStackProvider>
           <AuthProvider>
             <Header />
             <main>{children}</main>
+
+            {modal}
+
             <Footer />
           </AuthProvider>
         </TanStackProvider>

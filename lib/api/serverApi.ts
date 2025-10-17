@@ -1,4 +1,4 @@
-import type { AxiosRequestConfig } from 'axios';
+import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { cookies } from 'next/headers';
 import { api } from './api';
 import type { Note } from '@/types/note';
@@ -22,38 +22,64 @@ const mergeConfigs = async (
 
 export const fetchNotesServer = async (params?: FetchNotesParams) => {
   const config = await mergeConfigs();
-  return api.get('/notes', { params, ...config }).then(res => res.data);
+  const res = await api.get('/notes', { params, ...config });
+  return res.data;
 };
 
 export const fetchNoteByIdServer = async (id: string) => {
   const config = await mergeConfigs();
-  return api.get<Note>(`/notes/${id}`, config).then(res => res.data);
+  const res = await api.get<Note>(`/notes/${id}`, config);
+  return res.data;
 };
 
 export const createNoteServer = async (
   payload: Omit<Note, 'id' | 'createdAt' | 'updatedAt'>
 ) => {
   const config = await mergeConfigs();
-  return api.post<Note>('/notes', payload, config).then(res => res.data);
+  const res = await api.post<Note>('/notes', payload, config);
+  return res.data;
 };
 
 export const updateNoteServer = async (id: string, payload: Partial<Note>) => {
   const config = await mergeConfigs();
-  return api.patch<Note>(`/notes/${id}`, payload, config).then(res => res.data);
+  const res = await api.patch<Note>(`/notes/${id}`, payload, config);
+  return res.data;
 };
 
 export const deleteNoteServer = async (id: string) => {
   const config = await mergeConfigs();
-  return api.delete<Note>(`/notes/${id}`, config).then(res => res.data);
+  const res = await api.delete<Note>(`/notes/${id}`, config);
+  return res.data;
 };
 
-export const getSessionServer = async () =>
-  api.get('/auth/session', await mergeConfigs()).then(res => res.data);
+export const getSessionServer = async (): Promise<AxiosResponse> => {
+  const config = await mergeConfigs();
+
+  return await api.get('/auth/session', config);
+};
+
+export const checkSession = async (_refreshToken: string) => {
+  try {
+    const response = await getSessionServer();
+
+    const { accessToken, refreshToken: newRefreshToken } = response.data ?? {};
+
+    if (accessToken && newRefreshToken) {
+      return { accessToken, refreshToken: newRefreshToken };
+    }
+
+    return null;
+  } catch (error) {
+    console.error('checkSession failed:', error);
+    return null;
+  }
+};
 
 export const getCurrentUserServer = async () => {
   try {
     const config = await mergeConfigs();
-    return api.get<User>('/users/me', config).then(res => res.data);
+    const res = await api.get<User>('/users/me', config);
+    return res.data;
   } catch {
     return null;
   }
@@ -61,5 +87,9 @@ export const getCurrentUserServer = async () => {
 
 export const updateUserServer = async (payload: UpdateUserRequest) => {
   const config = await mergeConfigs();
-  return api.patch<User>('/users/me', payload, config).then(res => res.data);
+  const res = await api.patch<User>('/users/me', payload, config);
+  return res.data;
 };
+
+export const fetchNotes = fetchNotesServer;
+export const fetchNoteById = fetchNoteByIdServer;

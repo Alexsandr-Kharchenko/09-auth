@@ -59,14 +59,19 @@ const EditProfileForm = ({ user }: Props) => {
       </p>
 
       <div className={css.usernameWrapper}>
-        <label htmlFor="username">Username</label>
+        <label htmlFor="username" aria-label="Edit your username">
+          Username
+        </label>
         <input
           id="username"
           name="username"
           type="text"
           className={css.input}
           value={username}
-          onChange={e => setUsername(e.target.value)}
+          onChange={e => {
+            setUsername(e.target.value);
+            if (error) setError(null);
+          }}
           minLength={3}
           maxLength={50}
           required
