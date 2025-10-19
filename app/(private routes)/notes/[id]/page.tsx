@@ -12,7 +12,8 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const note = await fetchNoteById(params.id);
+  const { id } = params;
+  const note = await fetchNoteById(id);
 
   return {
     title: note.title || 'Note Details — NoteHub',
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: note.title || 'Note Details',
       description:
         note.content?.slice(0, 160) || 'View details of your note on NoteHub.',
-      url: `https://08-zustand-steel-mu.vercel.app/notes/${params.id}`,
+      url: `https://08-zustand-steel-mu.vercel.app/notes/${id}`,
       images: [
         {
           url: 'https://ac.goit.global/fullstack/react/notehub-og-meta.jpg',
@@ -36,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function NoteDetails({ params }: Props) {
-  const { id } = params;
+  const { id } = params; // ✅ без await
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({

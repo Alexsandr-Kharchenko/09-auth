@@ -37,20 +37,20 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
   modal,
-}: {
+}: Readonly<{
   children: React.ReactNode;
   modal: React.ReactNode;
-}) {
+}>) {
   return (
-    <html lang="en" className={roboto.variable}>
-      <body>
+    <html lang="en">
+      <body className={`${roboto.className} ${roboto.variable}`}>
         <TanStackProvider>
           <AuthProvider>
             <Header />
-            <main>{children}</main>
-
-            {modal}
-
+            <main>
+              {children}
+              {modal}
+            </main>
             <Footer />
           </AuthProvider>
         </TanStackProvider>

@@ -2,7 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { isAxiosError, type AxiosError } from 'axios';
+import { isAxiosError } from 'axios';
 import { updateUser } from '@/lib/api/clientApi';
 import { useAuthStore, type AuthState } from '@/lib/store/authStore';
 import type { UpdateUserRequest } from '@/types/auth';
@@ -15,35 +15,46 @@ type UpdateUserError = { message?: string; error?: string };
 const EditProfileForm = ({ user }: Props) => {
   const router = useRouter();
   const setUser = useAuthStore((state: AuthState) => state.setUser);
-  const [username, setUsername] = useState(user.username);
+
+  const [formData, setFormData] = useState<UpdateUserRequest>({
+    username: user.username,
+  });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (error) setError(null);
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
 
-    if (username.trim().length < 3) {
+    if (!formData.username || formData.username.trim().length < 3) {
       setError('Username must be at least 3 characters long.');
       return;
     }
 
-    const payload: UpdateUserRequest = { username: username.trim() };
-
     try {
       setIsSubmitting(true);
-      const updatedUser = await updateUser(payload);
+      const updatedUser = await updateUser({
+        username: formData.username.trim(),
+      });
       setUser(updatedUser);
       router.push('/profile');
     } catch (err: unknown) {
-      if (isAxiosError(err)) {
-        const axiosErr = err as AxiosError<UpdateUserError>;
+      if (isAxiosError<UpdateUserError>(err)) {
         const message =
-          axiosErr.response?.data?.message ||
-          axiosErr.response?.data?.error ||
-          axiosErr.message ||
+          err.response?.data?.message ||
+          err.response?.data?.error ||
+          err.message ||
           'Failed to update profile.';
         setError(message);
+      } else if (err instanceof Error) {
+        setError(err.message);
       } else {
         setError('Failed to update profile.');
       }
@@ -59,22 +70,18 @@ const EditProfileForm = ({ user }: Props) => {
       </p>
 
       <div className={css.usernameWrapper}>
-        <label htmlFor="username" aria-label="Edit your username">
-          Username
-        </label>
+        <label htmlFor="username">Username</label>
         <input
           id="username"
           name="username"
           type="text"
           className={css.input}
-          value={username}
-          onChange={e => {
-            setUsername(e.target.value);
-            if (error) setError(null);
-          }}
+          value={formData.username}
+          onChange={handleChange}
           minLength={3}
           maxLength={50}
           required
+          disabled={isSubmitting}
         />
       </div>
 

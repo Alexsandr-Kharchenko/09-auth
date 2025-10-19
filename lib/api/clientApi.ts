@@ -1,7 +1,8 @@
-import axios, { AxiosError, type AxiosRequestConfig } from 'axios';
-import type { Note } from '@/types/note';
-import type { User } from '@/types/user';
+import type { AxiosRequestConfig, AxiosError } from 'axios';
+import { nextServer } from './api';
+import type { Note, CreateNoteRequest } from '@/types/note';
 import type { AuthCredentials, UpdateUserRequest } from '@/types/auth';
+import type { User } from '@/types/user';
 
 export interface FetchNotesParams {
   page?: number;
@@ -15,10 +16,6 @@ export interface FetchNotesResponse {
   totalPages: number;
 }
 
-const clientApi = axios.create({
-  baseURL: '',
-});
-
 const buildNotesParams = ({
   page = 1,
   perPage = 12,
@@ -31,95 +28,136 @@ const buildNotesParams = ({
   ...(tag && tag !== 'All' ? { tag } : {}),
 });
 
+// --- Notes ---
 export const fetchNotesRequest = async (
   params?: FetchNotesParams,
   config?: AxiosRequestConfig
 ) => {
-  const response = await clientApi.get<FetchNotesResponse>('/api/notes', {
+  const response = await nextServer.get<FetchNotesResponse>('/notes', {
     params: buildNotesParams(params),
     ...config,
   });
+
   return response.data;
 };
+
+export const fetchNotes = async (params?: FetchNotesParams) =>
+  fetchNotesRequest(params);
 
 export const fetchNoteByIdRequest = async (
   id: string,
   config?: AxiosRequestConfig
 ) => {
-  const response = await clientApi.get<Note>(`/api/notes/${id}`, config);
+  const response = await nextServer.get<Note>(`/notes/${id}`, {
+    ...config,
+  });
+
   return response.data;
 };
 
+export const fetchNoteById = async (id: string) => fetchNoteByIdRequest(id);
+
 export const createNoteRequest = async (
-  payload: Omit<Note, 'id' | 'createdAt' | 'updatedAt'>,
+  payload: CreateNoteRequest,
   config?: AxiosRequestConfig
 ) => {
-  const response = await clientApi.post<Note>('/api/notes', payload, config);
+  const response = await nextServer.post<Note>('/notes', payload, {
+    ...config,
+  });
+
   return response.data;
 };
+
+export const createNote = async (payload: CreateNoteRequest) =>
+  createNoteRequest(payload);
 
 export const updateNoteRequest = async (
   id: string,
-  payload: Partial<Note>,
+  payload: CreateNoteRequest,
   config?: AxiosRequestConfig
 ) => {
-  const response = await clientApi.patch<Note>(
-    `/api/notes/${id}`,
-    payload,
-    config
-  );
+  const response = await nextServer.patch<Note>(`/notes/${id}`, payload, {
+    ...config,
+  });
+
   return response.data;
 };
+
+export const updateNote = async (id: string, payload: CreateNoteRequest) =>
+  updateNoteRequest(id, payload);
 
 export const deleteNoteRequest = async (
   id: string,
   config?: AxiosRequestConfig
 ) => {
-  const response = await clientApi.delete<Note>(`/api/notes/${id}`, config);
+  const response = await nextServer.delete<Note>(`/notes/${id}`, {
+    ...config,
+  });
+
   return response.data;
 };
 
-export const fetchNotes = (params?: FetchNotesParams) =>
-  fetchNotesRequest(params);
-export const fetchNoteById = (id: string) => fetchNoteByIdRequest(id);
-export const createNote = (
-  payload: Omit<Note, 'id' | 'createdAt' | 'updatedAt'>
-) => createNoteRequest(payload);
-export const updateNote = (id: string, payload: Partial<Note>) =>
-  updateNoteRequest(id, payload);
-export const deleteNote = (id: string) => deleteNoteRequest(id);
+export const deleteNote = async (id: string) => deleteNoteRequest(id);
 
-export const login = (credentials: AuthCredentials) =>
-  clientApi.post<User>('/api/auth/login', credentials).then(res => res.data);
-
-export const register = async (credentials: AuthCredentials) => {
+// --- Auth ---
+export const login = async (credentials: AuthCredentials) => {
   try {
-    const response = await clientApi.post<User>(
-      '/api/auth/register',
-      credentials
-    );
+    const response = await nextServer.post<User>('/auth/login', credentials);
     return response.data;
-  } catch (error: unknown) {
-    const axiosError = error as AxiosError<{ message: string }>;
-
-    if (axiosError.response?.status === 409) {
-      throw new Error('Користувач з таким email вже існує');
-    }
-
-    throw new Error(
-      axiosError.response?.data?.message || 'Помилка при реєстрації'
-    );
+  } catch (err) {
+    const error = err as AxiosError<{ message: string }>;
+    const message =
+      error.response?.data?.message || 'Login failed. Please try again.';
+    throw new Error(message);
   }
 };
 
-export const logout = () =>
-  clientApi.post('/api/auth/logout').then(res => res.data);
+export const register = async (credentials: AuthCredentials) => {
+  try {
+    const response = await nextServer.post<User>('/auth/register', credentials);
+    return response.data;
+  } catch (err) {
+    const error = err as AxiosError<{ message: string }>;
+    const message =
+      error.response?.data?.message || 'Registration failed. Please try again.';
+    throw new Error(message);
+  }
+};
 
-export const getSession = () =>
-  clientApi.get<User | null>('/api/auth/session').then(res => res.data || null);
+export const logout = async () => {
+  try {
+    await nextServer.post('/auth/logout');
+  } catch (err) {
+    const error = err as AxiosError;
+    console.error('Logout failed:', error.message);
+  }
+};
 
-export const getCurrentUser = () =>
-  clientApi.get<User>('/api/users/me').then(res => res.data);
+export const getSession = async () => {
+  try {
+    const response = await nextServer.get<User | null>('/auth/session');
+    return response.data || null;
+  } catch {
+    return null;
+  }
+};
 
-export const updateUser = (payload: UpdateUserRequest) =>
-  clientApi.patch<User>('/api/users/me', payload).then(res => res.data);
+export const getCurrentUser = async () => {
+  try {
+    const response = await nextServer.get<User>('/users/me');
+    return response.data;
+  } catch {
+    return null;
+  }
+};
+
+export const updateUser = async (payload: UpdateUserRequest) => {
+  try {
+    const response = await nextServer.patch<User>('/users/me', payload);
+    return response.data;
+  } catch (err) {
+    const error = err as AxiosError<{ message: string }>;
+    const message = error.response?.data?.message || 'Updating profile failed.';
+    throw new Error(message);
+  }
+};

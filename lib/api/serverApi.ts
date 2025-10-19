@@ -9,8 +9,9 @@ import type { FetchNotesParams } from './clientApi';
 const mergeConfigs = async (
   config?: AxiosRequestConfig
 ): Promise<AxiosRequestConfig> => {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const cookieHeader = cookieStore.toString();
+
   return {
     ...config,
     headers: {
@@ -54,14 +55,12 @@ export const deleteNoteServer = async (id: string) => {
 
 export const getSessionServer = async (): Promise<AxiosResponse> => {
   const config = await mergeConfigs();
-
   return await api.get('/auth/session', config);
 };
 
 export const checkSession = async (_refreshToken: string) => {
   try {
     const response = await getSessionServer();
-
     const { accessToken, refreshToken: newRefreshToken } = response.data ?? {};
 
     if (accessToken && newRefreshToken) {
@@ -91,5 +90,6 @@ export const updateUserServer = async (payload: UpdateUserRequest) => {
   return res.data;
 };
 
+// --- Експорти ---
 export const fetchNotes = fetchNotesServer;
 export const fetchNoteById = fetchNoteByIdServer;

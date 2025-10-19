@@ -22,3 +22,9 @@ export interface NoteFormData {
   content: string;
   tag: 'Todo' | 'Work' | 'Personal' | 'Meeting' | 'Shopping';
 }
+
+export interface CreateNoteRequest {
+  title: string;
+  content: string;
+  tag: NoteTag;
+}
