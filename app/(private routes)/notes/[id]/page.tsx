@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function NoteDetails({ params }: Props) {
-  const { id } = params; // ✅ без await
+  const { id } = params;
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({

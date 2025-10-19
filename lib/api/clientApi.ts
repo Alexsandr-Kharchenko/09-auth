@@ -28,7 +28,6 @@ const buildNotesParams = ({
   ...(tag && tag !== 'All' ? { tag } : {}),
 });
 
-// --- Notes ---
 export const fetchNotesRequest = async (
   params?: FetchNotesParams,
   config?: AxiosRequestConfig
@@ -99,7 +98,6 @@ export const deleteNoteRequest = async (
 
 export const deleteNote = async (id: string) => deleteNoteRequest(id);
 
-// --- Auth ---
 export const login = async (credentials: AuthCredentials) => {
   try {
     const response = await nextServer.post<User>('/auth/login', credentials);

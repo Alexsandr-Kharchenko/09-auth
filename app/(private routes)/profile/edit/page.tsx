@@ -9,7 +9,6 @@ export const dynamic = 'force-dynamic';
 export default async function EditProfilePage() {
   const user = await getCurrentUserServer();
 
-  // Редирект, якщо користувач не авторизований
   if (!user) redirect('/sign-in');
 
   return (
@@ -19,7 +18,7 @@ export default async function EditProfilePage() {
 
         <div className={css.avatarWrapper}>
           <Image
-            src={user.avatar || '/avatar.png'} // fallback на локальний аватар
+            src={user.avatar || '/avatar.png'}
             alt={`${user.username} avatar`}
             width={120}
             height={120}

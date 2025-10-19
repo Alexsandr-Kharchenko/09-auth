@@ -42,7 +42,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     checkSession();
   }, [setUser, clearIsAuthenticated]);
 
-  // Показуємо лоадер тільки на приватних сторінках під час завантаження
   if (isLoading && isPrivateRoute) {
     return (
       <div
@@ -58,7 +57,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     );
   }
 
-  // Завжди показуємо children (middleware контролює доступ)
   return <>{children}</>;
 };
 
