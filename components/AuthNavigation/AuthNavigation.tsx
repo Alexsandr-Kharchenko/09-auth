@@ -13,7 +13,7 @@ const AuthNavigation = () => {
   const isAuthenticated = useAuthStore(
     (state: AuthState) => state.isAuthenticated
   );
-  const user = useAuthStore((state: AuthState) => state.user);
+
   const clearIsAuthenticated = useAuthStore(
     (state: AuthState) => state.clearIsAuthenticated
   );
@@ -41,7 +41,6 @@ const AuthNavigation = () => {
           </Link>
         </li>
         <li className={css.navigationItem}>
-          <p className={css.userEmail}>{user?.email}</p>
           <button
             type="button"
             className={css.logoutButton}

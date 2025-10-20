@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { getSession } from '@/lib/api/clientApi';
+import { getSession, getUser } from '@/lib/api/clientApi';
 import { useAuthStore, type AuthState } from '@/lib/store/authStore';
 
 interface AuthProviderProps {
@@ -25,10 +25,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     const checkSession = async () => {
       try {
         setIsLoading(true);
-        const sessionUser = await getSession();
 
-        if (sessionUser) {
-          setUser(sessionUser);
+        // ✅ Перевірка, чи існує активна сесія
+        const session = await getSession();
+
+        if (session) {
+          // ✅ Якщо сесія валідна — отримуємо деталі користувача окремо
+          const userData = await getUser();
+          setUser(userData);
         } else {
           clearIsAuthenticated();
         }
