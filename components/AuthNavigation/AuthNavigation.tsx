@@ -10,10 +10,11 @@ import css from './AuthNavigation.module.css';
 const AuthNavigation = () => {
   const router = useRouter();
   const [isPending, setIsPending] = useState(false);
+
   const isAuthenticated = useAuthStore(
     (state: AuthState) => state.isAuthenticated
   );
-
+  const user = useAuthStore((state: AuthState) => state.user);
   const clearIsAuthenticated = useAuthStore(
     (state: AuthState) => state.clearIsAuthenticated
   );
@@ -32,12 +33,12 @@ const AuthNavigation = () => {
     }
   };
 
-  if (isAuthenticated) {
+  if (isAuthenticated && user) {
     return (
       <>
         <li className={css.navigationItem}>
           <Link href="/profile" prefetch={false} className={css.navigationLink}>
-            Profile
+            {user.username || user.email || 'Profile'}
           </Link>
         </li>
         <li className={css.navigationItem}>

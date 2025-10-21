@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { getSession, getUser } from '@/lib/api/clientApi';
+import { getSession, getCurrentUser } from '@/lib/api/clientApi';
 import { useAuthStore, type AuthState } from '@/lib/store/authStore';
 
 interface AuthProviderProps {
@@ -31,7 +31,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
         if (session) {
           // ✅ Якщо сесія валідна — отримуємо деталі користувача окремо
-          const userData = await getUser();
+          const userData = await getCurrentUser();
           setUser(userData);
         } else {
           clearIsAuthenticated();

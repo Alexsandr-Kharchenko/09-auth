@@ -140,22 +140,15 @@ export const getSession = async () => {
   }
 };
 
-export const getUser = async () => {
-  try {
-    const response = await nextServer.get<User>('/users/me');
-    return response.data;
-  } catch (err) {
-    const error = err as AxiosError<{ message: string }>;
-    console.error('Failed to fetch user:', error.response?.data?.message);
-    return null;
-  }
-};
-
 export const getCurrentUser = async () => {
   try {
     const response = await nextServer.get<User>('/users/me');
     return response.data;
-  } catch {
+  } catch (err) {
+    console.error(
+      'Failed to fetch user:',
+      (err as AxiosError<{ message: string }>).response?.data?.message
+    );
     return null;
   }
 };
